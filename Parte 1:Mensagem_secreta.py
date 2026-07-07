@@ -4,7 +4,7 @@ import random
 import os
 import time
 #1
-def text_to_bits(text):
+def texto_em_bits(text):
     #Converte texto em sinais algébricos (+1 e -1) para a matriz.
     bits = []
     for char in text:
@@ -12,7 +12,7 @@ def text_to_bits(text):
             bits.append(1 if bit == '1' else -1)
     return bits
 
-def bits_to_text(bits):
+def bits_para_texto(bits):
     #Reconstrói a string 
     chars = []
     for i in range(0, len(bits), 8):
