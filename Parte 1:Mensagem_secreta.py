@@ -3,7 +3,7 @@ import cv2
 import random
 import os
 import time
-#1
+
 def texto_em_bits(text):
     #Converte texto em sinais algébricos (+1 e -1) para a matriz.
     bits = []
