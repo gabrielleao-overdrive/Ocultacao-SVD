@@ -1,4 +1,10 @@
-def enforce_normal_svd(U, S, Vt):
+import numpy as np
+import cv2
+import random
+import os
+import time
+
+def svd(U, S, Vt):
     #garante a unicidade matemática exigindo positividade lexicográfica nas colunas de U.
     for j in range(U.shape[1]):
         if U[0, j] < 0:
@@ -15,7 +21,7 @@ def space_singular_values(S, k, n=8):
             S_spaced[idx] = S[k-1] - (idx - k + 1) * h
     return S_spaced
 
-def orthogonalize_system(U_prime, m):
+def ortogonaliza(U_prime, m):
     #Resolve o sistema linear para re-ortogonalizar a matriz sem sobrescrever a mensagem.
     n = U_prime.shape[1]
     for j in range(m, n):
@@ -33,8 +39,8 @@ def orthogonalize_system(U_prime, m):
 
         U_prime[fixed_end:, j] = x
 
-        norm = np.linalg.norm(U_prime[:, j])
-        if norm > 0:
-            U_prime[:, j] /= norm
+        norma = np.linalg.norm(U_prime[:, j])
+        if norma > 0:
+            U_prime[:, j] /= norma
 
     return U_prime
