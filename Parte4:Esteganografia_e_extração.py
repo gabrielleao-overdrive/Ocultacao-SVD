@@ -1,5 +1,10 @@
+import numpy as np
+import cv2
+import random
+import os
+import time
 
-def embed_block(block, payload, n=8, m=2, k=5, iteracoes=1):
+def embuta(block, payload, n=8, m=2, k=5, iteracoes=1):
     current_block = block.copy()
 
     #Injeção de Ruído Branco para evitar colapso em áreas lisas da imagem (Teorema 3.2)
@@ -19,15 +24,15 @@ def embed_block(block, payload, n=8, m=2, k=5, iteracoes=1):
                     U_prime[i, j] = payload[bit_idx] * abs(U[i, j])
                     bit_idx += 1
 
-        U_prime = orthogonalize_system(U_prime, m)
+        U_prime = ortogonaliza(U_prime, m)
         A_prime = np.dot(U_prime, np.dot(np.diag(S_mod), Vt))
         current_block = np.clip(np.round(A_prime), 0, 255)
 
     return current_block
 
-def extract_block(block, num_bits=15, n=8, m=2):
+def extrai_o_bloco(block, num_bits=15, n=8, m=2):
     U, S, Vt = np.linalg.svd(block, full_matrices=True)
-    U, S, Vt = enforce_normal_svd(U, S, Vt)
+    U, S, Vt = svd(U, S, Vt)
 
     bits = []
     bit_idx = 0
@@ -59,7 +64,7 @@ def hide_message_image(cover_path, stego_path, bits_payload, iteracoes=8, n=8, m
                 if block_payload:
                     if len(block_payload) < 15:
                         block_payload.extend([1] * (15 - len(block_payload)))
-                    stego_block = embed_block(block, block_payload, n, m, k, iteracoes)
+                    stego_block = embuta(block, block_payload, n, m, k, iteracoes)
                     stego_img[row:row+n, col:col+n, c] = stego_block
                 else:
                     stego_img[row:row+n, col:col+n, c] = block
